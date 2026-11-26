@@ -33,28 +33,28 @@ public class ProfessorController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER_DELETE')")
+    @PreAuthorize("hasAuthority('PROFESSOR_MANAGE')")
     public ResponseEntity<Void> deleteProfessor(@PathVariable Long id) {
         professorCommandService.deleteProfessor(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER_EDIT')")
+    @PreAuthorize("hasAuthority('PROFESSOR_MANAGE')")
     public ResponseEntity<ProfessorResponse> updateProfessor(@PathVariable Long id, @RequestBody ProfessorRequest professorRequest) {
         ProfessorResponse professorResponse = professorCommandService.updateProfessor(id, professorRequest);
         return ResponseEntity.status(HttpStatus.OK).body(professorResponse);
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER_VIEW')")
+    @PreAuthorize("hasAuthority('PROFESSOR_MANAGE')")
     public ResponseEntity<ProfessorResponse> updatePatch(@PathVariable Long id , @RequestBody ProfessorPatchRequest professorPatchRequest) {
         ProfessorResponse professorResponse = professorCommandService.patchProfessor(id,  professorPatchRequest);
         return ResponseEntity.status(HttpStatus.OK).body(professorResponse);
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('USER_EDIT')")
+    @PreAuthorize("hasAuthority('PROFESSOR_VIEW')")
     public ResponseEntity<List<ProfessorResponse>> getAllProfessors() {
         List<ProfessorResponse> professorResponses = professorQueryService.getAllProfessors();
         return ResponseEntity.status(HttpStatus.OK).body(professorResponses);

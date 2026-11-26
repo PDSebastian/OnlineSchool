@@ -136,19 +136,26 @@ public class AuthServiceImpl implements AuthService {
     private Set<UserPermissions> permissionsForType(UserType type) {
         if (type == UserType.PROFESSOR) {
             return Set.of(
-                    UserPermissions.USER_VIEW,
-                    UserPermissions.USER_EDIT,
+                    UserPermissions.STUDENT_VIEW,
+                    UserPermissions.STUDENT_MANAGE,
+                    UserPermissions.PROFESSOR_VIEW,
+                    UserPermissions.PROFESSOR_MANAGE,
                     UserPermissions.COURSE_VIEW,
                     UserPermissions.COURSE_MANAGE,
-                    UserPermissions.STUDENT_VIEW
+                    UserPermissions.BOOK_VIEW,
+                    UserPermissions.BOOK_MANAGE,
+                    UserPermissions.ENROL_VIEW,
+                    UserPermissions.ENROL_MANAGE
             );
         }
         return Set.of(
-                UserPermissions.USER_VIEW,
-                UserPermissions.USER_EDIT,
+                UserPermissions.STUDENT_VIEW,
+                UserPermissions.PROFESSOR_VIEW,
                 UserPermissions.COURSE_VIEW,
-                UserPermissions.ENROL_SELF,
-                UserPermissions.STUDENT_VIEW
+                UserPermissions.BOOK_VIEW,
+                UserPermissions.BOOK_MANAGE,
+                UserPermissions.ENROL_VIEW,
+                UserPermissions.ENROL_MANAGE
         );
     }
 }

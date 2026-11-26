@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@WithAllPermissions
 @Transactional
 class StudentIntegrationTest {
 
@@ -108,7 +108,6 @@ class StudentIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER_EDIT")
     @DisplayName("PUT /api/v2/students/{id} chiar persista modificarea in DB")
     void updateStudent_persistsChange() throws Exception {
         // Arrange
@@ -134,7 +133,6 @@ class StudentIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER_DELETE")
     @DisplayName("DELETE /api/v2/students/{id} sterge studentul din DB")
     void deleteStudent_removesFromDatabase() throws Exception {
         // Act

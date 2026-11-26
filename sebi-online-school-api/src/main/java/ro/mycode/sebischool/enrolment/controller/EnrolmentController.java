@@ -27,44 +27,49 @@ public class EnrolmentController {
 
     }
     @PostMapping("/add")
-    @PreAuthorize("hasAuthority('ENROL_SELF')")
+    @PreAuthorize("hasAuthority('ENROL_MANAGE')")
     public ResponseEntity<EnrolmentResponse> addEnrolment(@Valid @RequestBody EnrolmentRequest enrolmentRequest) {
         log.debug("http post /api/v2/enrolments");
         EnrolmentResponse response = enrolmentCommandService.addEnrolment(enrolmentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER_DELETE')")
+    @PreAuthorize("hasAuthority('ENROL_MANAGE')")
     public ResponseEntity<Void> deleteEnrolment(@PathVariable Long id) {
         log.debug("http delete /api/v2/enrolments/{}", id);
        enrolmentCommandService.deleteEnrolment(id);
         return ResponseEntity.noContent().build();
     }
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('ENROL_MANAGE')")
     public ResponseEntity<EnrolmentResponse> patchEnrolment(@PathVariable Long id, @RequestBody EnrolmentPatchRequest request) {
         log.debug("http patch /api/v2/enrolments/{}", id);
         EnrolmentResponse response = enrolmentCommandService.patchEnrolment(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ENROL_MANAGE')")
     public ResponseEntity<EnrolmentResponse> updateEnrolment(@PathVariable Long id, @Valid @RequestBody EnrolmentRequest request) {
         log.debug("http put /api/v2/enrolments/{}", id);
         EnrolmentResponse response = enrolmentCommandService.updateEnrolment(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @GetMapping("")
+    @PreAuthorize("hasAuthority('ENROL_VIEW')")
     public ResponseEntity<List<EnrolmentResponse>> getAllEnrolments() {
         log.debug("http get /api/v2/enrolments");
         List<EnrolmentResponse> response = enrolmentQueryService.getAllEnrolments();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @GetMapping("/course/{courseId}")
+    @PreAuthorize("hasAuthority('ENROL_VIEW')")
     public ResponseEntity<List<EnrolmentResponse>> getEnrolmentsByStudent(@PathVariable Long courseId) {
         log.debug("http get /api/v2/enrolments/course/{}", courseId);
         List<EnrolmentResponse> response = enrolmentQueryService.getAllEnrolmentsByCourseId(courseId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @GetMapping("/course/{courseId}/students")
+    @PreAuthorize("hasAuthority('ENROL_VIEW')")
     public ResponseEntity< List<StudentSummaryResponse> >getStudentsByCourseId(@PathVariable Long courseId) {
         List<StudentSummaryResponse> response = enrolmentQueryService.getStudentsByCourseId(courseId);
         return ResponseEntity.status(HttpStatus.OK).body(response);

@@ -41,6 +41,7 @@ public class    CourseController {
 
     }
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('COURSE_MANAGE')")
     public ResponseEntity<CourseSummaryResponse> patchCourse(@PathVariable Long id, @RequestBody CoursePatchRequest coursePatchRequest) {
         log.debug("http patch /api/v2/courses/{}", id);
         CourseSummaryResponse c = courseCommandService.updatePatchCourse(id, coursePatchRequest);
@@ -61,12 +62,14 @@ public class    CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(courses);
     }
     @GetMapping("/by-name/{name}")
+    @PreAuthorize("hasAuthority('COURSE_VIEW')")
     public ResponseEntity<CourseSummaryResponse> getCourseByName(@PathVariable String name) {
         log.debug("http get /api/v2/courses/by-name/{}", name);
         CourseSummaryResponse course = courseQueryService.getCourseByName(name);
         return ResponseEntity.status(HttpStatus.OK).body(course);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('COURSE_VIEW')")
     public ResponseEntity<CourseSummaryResponse> getCourseById(@PathVariable Long id) {
         log.debug("http get /api/v2/courses/{}", id);
         CourseSummaryResponse r=courseQueryService.getCourseById(id);

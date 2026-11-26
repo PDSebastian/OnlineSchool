@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,11 +27,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * INTEGRATION TEST pentru Course — tot lantul real cu H2.
  * GET-urile fara @PreAuthorize merg (addFilters=false), dar GET /, PUT si DELETE
- * cer COURSE_VIEW / COURSE_MANAGE, deci punem @WithMockUser cu autoritatea potrivita.
+ * cer COURSE_VIEW / COURSE_MANAGE, deci clasa foloseste @WithAllPermissions.
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@WithAllPermissions
 @Transactional
 class CourseIntegrationTest {
 
@@ -57,7 +57,6 @@ class CourseIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "COURSE_VIEW")
     @DisplayName("GET /api/v2/courses intoarce cursul seedat")
     void getAllCourses_returnsSeededCourse() throws Exception {
         mockMvc.perform(get("/api/v2/courses"))
@@ -81,7 +80,6 @@ class CourseIntegrationTest {
             + "(CourseMapper.toEntity) ignorand course-ul incarcat. Trebuie: findById(id), "
             + "muta setName/setDepartament pe 'course', save(course) o singura data. "
             + "Scoate @Disabled dupa fix — testul trebuie sa treaca.")
-    @WithMockUser(authorities = "COURSE_MANAGE")
     @DisplayName("PUT /api/v2/courses/{id} persista modificarea in DB")
     void updateCourse_persistsChange() throws Exception {
         CourseRequest request = CourseRequest.builder()
@@ -101,7 +99,6 @@ class CourseIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "COURSE_MANAGE")
     @DisplayName("DELETE /api/v2/courses/{id} sterge cursul din DB")
     void deleteCourse_removesFromDatabase() throws Exception {
         mockMvc.perform(delete("/api/v2/courses/" + courseId))

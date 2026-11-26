@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +29,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * INTEGRATION TEST pentru Professor — un profesor este legat 1-la-1 de un User,
  * deci seedam User(PROFESSOR) + Professor. Endpoint-urile cer USER_EDIT,
- * asa ca punem @WithMockUser cu aceasta autoritate.
+ * asa ca clasa foloseste @WithAllPermissions.
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@WithAllPermissions
 @Transactional
 class ProfessorIntegrationTest {
 
@@ -74,7 +74,6 @@ class ProfessorIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER_EDIT")
     @DisplayName("GET /api/v2/profesori intoarce profesorul seedat")
     void getAllProfessors_returnsSeeded() throws Exception {
         mockMvc.perform(get("/api/v2/profesori"))
@@ -85,7 +84,6 @@ class ProfessorIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER_EDIT")
     @DisplayName("PUT /api/v2/profesori/{id} persista specializarea si experienta")
     void updateProfessor_persistsChange() throws Exception {
         ProfessorRequest request = ProfessorRequest.builder()
@@ -109,7 +107,6 @@ class ProfessorIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER_EDIT")
     @DisplayName("PUT /api/v2/profesori/{id} inexistent intoarce 404")
     void updateProfessor_notFound_returns404() throws Exception {
         ProfessorRequest request = ProfessorRequest.builder()

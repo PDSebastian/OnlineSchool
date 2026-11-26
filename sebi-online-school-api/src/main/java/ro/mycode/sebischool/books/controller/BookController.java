@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ro.mycode.sebischool.books.service.commandService.BookCommandService;
 import ro.mycode.sebischool.books.dtos.BookPatchRequest;
@@ -26,6 +27,7 @@ public class BookController {
     }
 
     @PostMapping("/student/{studentId}")
+    @PreAuthorize("hasAuthority('BOOK_MANAGE')")
     public ResponseEntity<BookResponse> addBook(@PathVariable Long studentId, @Valid @RequestBody Bookrequest bookRequest) {
         log.debug("http post /api/v2/books/student/{}", studentId);
         BookResponse b = bookCommandService.addBook(studentId, bookRequest);
@@ -33,6 +35,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('BOOK_MANAGE')")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         log.debug("http delete /api/v2/books/{}", id);
         bookCommandService.deleteBook(id);
@@ -40,6 +43,7 @@ public class BookController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('BOOK_MANAGE')")
     public ResponseEntity<BookResponse> patchBook(@PathVariable Long id, @Valid @RequestBody BookPatchRequest bookPatchRequest) {
         log.debug("http patch /api/v2/books/{}", id);
         BookResponse b = bookCommandService.updatePatchBook(id, bookPatchRequest);
@@ -47,6 +51,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('BOOK_MANAGE')")
     public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @Valid @RequestBody Bookrequest bookRequest) {
         log.debug("http put /api/v2/books/{}", id);
         BookResponse b = bookCommandService.updateBook(id, bookRequest);
@@ -54,6 +59,7 @@ public class BookController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAuthority('BOOK_VIEW')")
     public ResponseEntity<List<BookResponse>> getAllBooks() {
         log.debug("http get /api/v2/books");
         List<BookResponse> b = bookQueryService.getAllBooks();
@@ -61,12 +67,14 @@ public class BookController {
     }
 
     @GetMapping("/by-name/{bookName}")
+    @PreAuthorize("hasAuthority('BOOK_VIEW')")
     public ResponseEntity<BookResponse> getBookByBookName(@PathVariable String bookName) {
         log.debug("http get /api/v2/books/by-name/{}", bookName);
         BookResponse b = bookQueryService.getBookByBookName(bookName);
         return ResponseEntity.status(HttpStatus.OK).body(b);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('BOOK_VIEW')")
     public ResponseEntity<BookResponse> getBookById(@PathVariable Long id) {
         log.debug("http get /api/v2/books/{}", id);
        BookResponse b=bookQueryService.getBookById(id);

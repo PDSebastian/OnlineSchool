@@ -25,33 +25,35 @@ public class StudentController {
         this.studentQueryService = studentQueryService;
     }
     @PostMapping("/add")
-    @PreAuthorize("hasAuthority('USER_ADD')")
+    @PreAuthorize("hasAuthority('STUDENT_MANAGE')")
     public ResponseEntity<StudentSummaryResponse> addStudent(@Valid @RequestBody StudentRequest studentRequest) {
         log.debug("http post /api/v2/students");
         StudentSummaryResponse s = studentCommandService.addStudent(studentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(s);
     }
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER_DELETE')")
+    @PreAuthorize("hasAuthority('STUDENT_MANAGE')")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         log.debug("http delete /api/v2/students/{}", id);
         studentCommandService.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('STUDENT_MANAGE')")
     public ResponseEntity<StudentSummaryResponse> patchStudent(@PathVariable Long id, @Valid @RequestBody StudentPatchRequest studentPatchRequest) {
         log.debug("http patch /api/v2/students/{}", id);
         StudentSummaryResponse s = studentCommandService.updatePatchStudent(id, studentPatchRequest);
         return ResponseEntity.status(HttpStatus.OK).body(s);
     }
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER_EDIT')")
+    @PreAuthorize("hasAuthority('STUDENT_MANAGE')")
     public ResponseEntity<StudentSummaryResponse> updateStudent(@PathVariable Long id, @Valid @RequestBody StudentRequest studentRequest) {
         log.debug("http put /api/v2/students/{}", id);
         StudentSummaryResponse s = studentCommandService.updateStudent(id, studentRequest);
         return ResponseEntity.status(HttpStatus.OK).body(s);
     }
     @GetMapping("")
+    @PreAuthorize("hasAuthority('STUDENT_VIEW')")
     public ResponseEntity<List<StudentSummaryResponse>> getAllStudents() {
         log.debug("http get /api/v2/students");
         List<StudentSummaryResponse> students = studentQueryService.getAllStudents();
@@ -59,12 +61,14 @@ public class StudentController {
     }
 
     @GetMapping("/by-first-name/{firstName}")
+    @PreAuthorize("hasAuthority('STUDENT_VIEW')")
     public ResponseEntity<List<StudentSummaryResponse>> getStudentByFirstName(@PathVariable String firstName) {
         log.debug("http get /api/v2/students/by-first-name/{}", firstName);
         List<StudentSummaryResponse> students = studentQueryService.getStudentsByFirstName(firstName);
         return ResponseEntity.status(HttpStatus.OK).body(students);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('STUDENT_VIEW')")
     public ResponseEntity<StudentDetailResponse> getStudentDetails(@PathVariable Long id) {
         log.debug("http get /api/v2/students/{}", id);
         StudentDetailResponse s= studentQueryService.getStudentById(id);

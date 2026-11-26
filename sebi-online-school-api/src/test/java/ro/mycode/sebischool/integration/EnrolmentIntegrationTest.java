@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@WithAllPermissions
 @Transactional
 class EnrolmentIntegrationTest {
 
@@ -116,7 +116,6 @@ class EnrolmentIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ENROL_SELF")
     @DisplayName("POST /api/v2/enrolments/add creeaza o inscriere noua intr-un alt curs")
     void addEnrolment_persistsNew() throws Exception {
         // alt curs, ca sa nu lovim regula 'inscriere deja existenta'
@@ -137,7 +136,6 @@ class EnrolmentIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER_DELETE")
     @DisplayName("DELETE /api/v2/enrolments/{id} sterge inscrierea din DB")
     void deleteEnrolment_removesFromDatabase() throws Exception {
         mockMvc.perform(delete("/api/v2/enrolments/" + enrolmentId))

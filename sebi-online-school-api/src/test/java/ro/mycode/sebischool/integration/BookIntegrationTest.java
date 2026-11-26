@@ -34,11 +34,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * INTEGRATION TEST pentru Book — o carte apartine unui Student, deci seedam
  * intai User -> Student -> Book. Endpoint-urile de carti nu au @PreAuthorize,
- * iar securitatea e oprita (addFilters=false), deci nu avem nevoie de @WithMockUser.
+ * iar securitatea e oprita (addFilters=false). Securitatea o testeaza PermissionsIntegrationTest (login real).
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@WithAllPermissions
 @Transactional
 class BookIntegrationTest {
 
