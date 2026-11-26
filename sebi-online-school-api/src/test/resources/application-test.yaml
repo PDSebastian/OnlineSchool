@@ -14,3 +14,8 @@ spring:
         globally_quoted_identifiers: true
   liquibase:
     enabled: false
+
+application:
+  jwt:
+    # Valoare falsa, doar pentru teste (nu e secretul real).
+    secretKey: test-only-fake-jwt-key-0123456789-0123456789-0123456789-0123456789-abcdef
