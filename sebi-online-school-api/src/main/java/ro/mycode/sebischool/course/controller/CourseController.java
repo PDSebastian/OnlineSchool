@@ -34,10 +34,10 @@ public class    CourseController {
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('COURSE_MANAGE')")
-    public ResponseEntity<CourseSummaryResponse> deleteCourse(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
         log.debug("http delete /api/v2/courses/{}", id);
-        CourseSummaryResponse c=courseCommandService.deleteCourse(id);
-        return ResponseEntity.status(HttpStatus.OK).body(c);
+        courseCommandService.deleteCourse(id);
+        return ResponseEntity.noContent().build();
 
     }
     @PatchMapping("/{id}")

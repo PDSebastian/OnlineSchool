@@ -2,6 +2,7 @@ package ro.mycode.sebischool.system.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ro.mycode.sebischool.books.exceptions.BookAlreadyExistsException;
@@ -18,8 +19,11 @@ import ro.mycode.sebischool.student.exceptions.InvalidStudentAgeException;
 import ro.mycode.sebischool.student.exceptions.StudentAlreadyExistsException;
 import ro.mycode.sebischool.student.exceptions.StudentNotFoundException;
 import ro.mycode.sebischool.auth.exceptions.AuthValidationException;
+import ro.mycode.sebischool.system.constants.ErrorConstants;
 import ro.mycode.sebischool.users.exceptions.UserAlreadyExistsException;
 import ro.mycode.sebischool.users.exceptions.UserNotFoundException;
+
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionsHandler {
@@ -73,6 +77,18 @@ public class GlobalExceptionsHandler {
     public ResponseEntity<ApiErrorResponse> handleBadRequest(RuntimeException e) {
         ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
                 .message(e.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiErrorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleValidation(MethodArgumentNotValidException e) {
+        String details = e.getBindingResult().getFieldErrors().stream()
+                .map(f -> f.getField() + ": " + f.getDefaultMessage())
+                .collect(Collectors.joining("; "));
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .message(details.isEmpty() ? ErrorConstants.VALIDATION_ERROR : details)
                 .status(HttpStatus.BAD_REQUEST.value())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiErrorResponse);

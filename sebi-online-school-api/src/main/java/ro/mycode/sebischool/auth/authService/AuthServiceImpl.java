@@ -9,6 +9,7 @@ import ro.mycode.sebischool.auth.dtos.AuthLoginRequest;
 import ro.mycode.sebischool.auth.dtos.AuthLoginResponse;
 import ro.mycode.sebischool.auth.dtos.AuthRegisterRequest;
 import ro.mycode.sebischool.auth.exceptions.AuthValidationException;
+import ro.mycode.sebischool.system.constants.ErrorConstants;
 import ro.mycode.sebischool.professor.model.Professor;
 import ro.mycode.sebischool.professor.repository.ProfessorRepository;
 import ro.mycode.sebischool.student.model.Student;
@@ -106,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
 
     private void createStudentForUser(User user, AuthRegisterRequest request) {
         if (request.age() == null) {
-            throw new AuthValidationException("age is required when registering as STUDENT");
+            throw new AuthValidationException(ErrorConstants.AUTH_STUDENT_AGE_REQUIRED_ERROR);
         }
         Student student = Student.builder()
                 .age(request.age())
@@ -117,7 +118,7 @@ public class AuthServiceImpl implements AuthService {
 
     private void createProfessorForUser(User user, AuthRegisterRequest request) {
         if(request.specialty()==null|| request.departament()==null|| request.yearExperience()==null) {
-            throw new AuthValidationException("speciality or departament is required");
+            throw new AuthValidationException(ErrorConstants.AUTH_PROFESSOR_FIELDS_REQUIRED_ERROR);
         }
         Professor professor = Professor.builder()
                 .specialty(request.specialty())

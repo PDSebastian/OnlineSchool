@@ -105,7 +105,7 @@ class CourseIntegrationTest {
     @DisplayName("DELETE /api/v2/courses/{id} sterge cursul din DB")
     void deleteCourse_removesFromDatabase() throws Exception {
         mockMvc.perform(delete("/api/v2/courses/" + courseId))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         assertTrue(courseRepository.findById(courseId).isEmpty());
     }

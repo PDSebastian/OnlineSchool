@@ -20,6 +20,9 @@ public class ErrorConstants {
     public static final String USER_ALREADY_EXISTS_ERROR = "User Already Exists";
     public static final String PROFESSOR_ALREADY_EXISTS_ERROR = "Professor Already Exists";
     public static final String PROFESSOR_NOT_FOUND_ERROR = "Professor does not exist";
+    public static final String AUTH_STUDENT_AGE_REQUIRED_ERROR = "Age is required when registering as STUDENT";
+    public static final String AUTH_PROFESSOR_FIELDS_REQUIRED_ERROR = "Specialty, departament and year of experience are required when registering as PROFESSOR";
+    public static final String VALIDATION_ERROR = "Validation failed";
 
 
 }
